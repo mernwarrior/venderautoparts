@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { FaBars, FaTimes, FaPhone, FaEnvelope } from 'react-icons/fa';
-
-export default function Navbar() {
+// import { FaBars, FaTimes, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { FaBars, FaTimes, FaPhone, FaEnvelope, FaShoppingCart } from 'react-icons/fa';
+interface NavbarProps {
+  cartCount: number
+}
+export default function Navbar({ cartCount }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
 
@@ -74,6 +77,16 @@ export default function Navbar() {
               <Link href="/contact" className="btn-primary">
                 Get Quote
               </Link>
+              <Link href="/cart" className="relative">
+  <div className="flex items-center gap-2 text-gray-700 hover:text-accent">
+    
+    <FaShoppingCart className="text-xl" />
+
+    <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+      {cartCount}
+    </span>
+  </div>
+</Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -128,6 +141,15 @@ export default function Navbar() {
               <Link href="/contact" className="block btn-primary text-center" onClick={toggleMenu}>
                 Get Quote
               </Link>
+              <Link
+  href="/cart"
+  className="flex items-center gap-3 text-gray-700 hover:text-accent font-semibold"
+  onClick={toggleMenu}
+>
+  <FaShoppingCart />
+
+  Cart ({cartCount})
+</Link>
             </div>
           </div>
         )}

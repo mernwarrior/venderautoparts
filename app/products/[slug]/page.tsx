@@ -1,14 +1,28 @@
-import { products } from '@/data/products';
+import { getProductBySlug } from '@/services/productService';
+import { products as mockProducts } from '@/data/products';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function ProductDetails({ params }: { params: { slug: string } }) {
-  const product = products.find(p => p.urlSlug === params.slug);
+export default async function ProductDetails({ params }: { params: { slug: string } }) {
+  let product = null;
+  try {
+    product = await getProductBySlug(params.slug);
+  } catch (error) {
+    console.error('Failed to fetch product by slug, using fallback:', error);
+  }
+
+  if (!product) {
+    product = mockProducts.find(p => p.urlSlug === params.slug) || null;
+  }
 
   if (!product) {
     notFound();
   }
+
+  const imageUrl = product.image.startsWith('http')
+    ? product.image
+    : `https://eco-node-revm.onrender.com${product.image}`;
 
   return (
     <div className="py-16">
@@ -17,9 +31,10 @@ export default function ProductDetails({ params }: { params: { slug: string } })
           {/* Product Image */}
           <div className="relative h-96 lg:h-full bg-gray-100 rounded-lg overflow-hidden">
             <Image
-              src={product.image.url}
+              src={imageUrl}
               alt={product.title}
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
           </div>
@@ -34,9 +49,18 @@ export default function ProductDetails({ params }: { params: { slug: string } })
               {product.title}
             </h1>
 
-            <div className="bg-gray-50 p-4 rounded-lg mb-6">
-              <div className="text-sm text-gray-600">Stock ID</div>
-              <div className="text-xl font-semibold text-primary">{product.stockId}</div>
+            <div className="bg-gray-50 p-4 rounded-lg mb-6 flex justify-between items-center">
+              <div>
+                <div className="text-sm text-gray-600">Stock ID</div>
+                <div className="text-xl font-semibold text-primary">{product.stockId}</div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm text-gray-600">Price</div>
+                <div className="text-2xl font-bold text-accent">₹{product.saleAmount}</div>
+                {product.amount > product.saleAmount && (
+                  <span className="text-xs text-gray-400 line-through">₹{product.amount}</span>
+                )}
+              </div>
             </div>
 
             <div className="prose prose-lg mb-8">
@@ -45,7 +69,7 @@ export default function ProductDetails({ params }: { params: { slug: string } })
 
             <div className="space-y-4">
               <Link href="/contact" className="btn-primary w-full md:w-auto block text-center">
-                Add to Enquiry
+                Get Quote / Contact Us
               </Link>
               <Link href="/products" className="btn-secondary w-full md:w-auto block text-center">
                 Back to Products

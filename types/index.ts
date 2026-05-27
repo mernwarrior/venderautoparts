@@ -1,21 +1,26 @@
 export interface Product {
-  id: string;
-  category: string;
-  subCategory: string;
-  description: string;
-  title: string;
-  stockId: string;
-  image: {
-    url: string;
-    name: string;
-  };
-  brandTitle: string;
-  urlSlug: string;
+  _id: string
+  category: string
+  subCategory: string
+  title: string
+  description: string
+  stockId: string
+  amount: number
+  saleAmount: number
+  image: string
+  brandTitle: string
+  urlSlug: string
+  createdAt?: string
+  updatedAt?: string
 }
 
-export interface Service {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
+export interface ProductResponse {
+  statusCode: number
+  success: boolean
+  message: string
+  data: Product[]
+  totalItems: number
+  totalPages: number
+  currentPage: number
+  perPage: number
 }
