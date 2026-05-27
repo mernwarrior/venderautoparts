@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Pagination from '@/components/Pagination'
+import ConfirmModal from '@/components/ConfirmModal'
+import { useToast } from '@/components/context/ToastContext'
 
 interface Contact {
   _id: string
@@ -15,9 +17,11 @@ interface Contact {
 const PER_PAGE = 10
 
 export default function AdminContacts() {
+  const { showToast } = useToast()
   const [contacts, setContacts] = useState<Contact[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
+  const [deleteTarget, setDeleteTarget] = useState<Contact | null>(null)
 
   useEffect(() => {
     fetchContacts()
@@ -35,15 +39,20 @@ export default function AdminContacts() {
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Delete this contact query?')) return
+  const handleDelete = async () => {
+    if (!deleteTarget) return
     try {
-      const res = await fetch(`/api/contacts/${id}`, { method: 'DELETE' })
+      const res = await fetch(`/api/contacts/${deleteTarget._id}`, { method: 'DELETE' })
       if (res.ok) {
-        setContacts((prev) => prev.filter((c) => c._id !== id))
+        setContacts((prev) => prev.filter((c) => c._id !== deleteTarget._id))
+        showToast('Contact query deleted', 'success')
+      } else {
+        showToast('Failed to delete', 'error')
       }
     } catch (err) {
-      console.error('Failed to delete contact', err)
+      showToast('Something went wrong', 'error')
+    } finally {
+      setDeleteTarget(null)
     }
   }
 
@@ -63,19 +72,19 @@ export default function AdminContacts() {
         <>
           <div className="space-y-4">
             {paginated.map((contact) => (
-              <div key={contact._id} className="bg-white rounded-lg shadow-md p-6">
+              <div key={contact._id} className="bg-white rounded-lg shadow-md p-4 sm:p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="font-bold text-primary-dark text-lg">{contact.name}</h3>
-                    <p className="text-sm text-gray-500">{contact.email}</p>
-                    {contact.phone && <p className="text-sm text-gray-500">{contact.phone}</p>}
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-bold text-primary-dark text-base sm:text-lg truncate">{contact.name}</h3>
+                    <p className="text-xs sm:text-sm text-gray-500 truncate">{contact.email}</p>
+                    {contact.phone && <p className="text-xs sm:text-sm text-gray-500">{contact.phone}</p>}
                     <p className="text-xs text-gray-400 mt-1">{new Date(contact.createdAt).toLocaleString()}</p>
                   </div>
-                  <button onClick={() => handleDelete(contact._id)}
-                    className="text-red-500 hover:text-red-700 text-sm font-semibold">Delete</button>
+                  <button onClick={() => setDeleteTarget(contact)}
+                    className="text-red-500 hover:text-red-700 text-sm font-semibold flex-shrink-0 ml-2">Delete</button>
                 </div>
-                <div className="bg-gray-50 rounded p-4">
-                  <p className="text-gray-700">{contact.message}</p>
+                <div className="bg-gray-50 rounded p-3 sm:p-4">
+                  <p className="text-sm sm:text-base text-gray-700">{contact.message}</p>
                 </div>
               </div>
             ))}
@@ -83,6 +92,16 @@ export default function AdminContacts() {
           <Pagination current={page} total={contacts.length} perPage={PER_PAGE} onPage={setPage} />
         </>
       )}
+      <ConfirmModal
+        isOpen={!!deleteTarget}
+        title="Delete Contact Query"
+        message={`Are you sure you want to delete the query from "${deleteTarget?.name}"?`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   )
 }

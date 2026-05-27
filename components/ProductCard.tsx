@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Product } from '@/types'
 import Image from 'next/image'
+import { useToast } from '@/components/context/ToastContext'
 
 interface ProductCardProps {
   product: Product
@@ -10,14 +11,20 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, addToCart }: ProductCardProps) {
+  const { showToast } = useToast()
   const imageUrl = product?.image?.startsWith('http')
     ? product?.image
     : product?.image
-  const slug = product?.urlSlug || product?._id
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    addToCart(product)
+    showToast(`${product.title} added to cart!`, 'success')
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
-      <div className="relative h-64 overflow-hidden bg-gray-100">
+      <div className="relative h-48 sm:h-56 lg:h-64 overflow-hidden bg-gray-100">
         <Image
           src={imageUrl || '/placeholder.png'}
           alt={product?.title || 'Product image'}
@@ -27,45 +34,42 @@ export default function ProductCard({ product, addToCart }: ProductCardProps) {
         />
       </div>
 
-      <div className="p-6">
-        <div className="text-xs text-gray-500 mb-2 uppercase tracking-wider">
+      <div className="p-4 sm:p-6">
+        <div className="text-[10px] sm:text-xs text-gray-500 mb-2 uppercase tracking-wider">
           {product.brandTitle} • {product.subCategory}
         </div>
 
-        <h3 className="text-lg font-bold text-primary-dark mb-3 line-clamp-2 h-14">
+        <h3 className="text-sm sm:text-lg font-bold text-primary-dark mb-2 sm:mb-3 line-clamp-2 h-10 sm:h-14">
           {product.title}
         </h3>
 
-        <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+        <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3">
           {product.description}
         </p>
 
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-xl font-bold text-accent">
+        <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+          <span className="text-base sm:text-xl font-bold text-accent">
             ₹{product.saleAmount}
           </span>
-          <span className="text-gray-400 line-through">₹{product.amount}</span>
+          <span className="text-xs sm:text-sm text-gray-400 line-through">₹{product.amount}</span>
         </div>
 
-        <div className="flex flex-col gap-3">
-          <span className="text-xs text-gray-500">Stock ID: {product.stockId}</span>
+        <div className="flex flex-col gap-2 sm:gap-3">
+          <span className="text-[10px] sm:text-xs text-gray-500">Stock ID: {product.stockId}</span>
 
           <button
-            onClick={(e) => {
-              e.stopPropagation()
-              addToCart(product)
-            }}
-            className="w-full bg-accent text-white py-2 rounded-md hover:bg-accent-dark transition"
+            onClick={handleAddToCart}
+            className="w-full bg-accent text-white py-2 rounded-md hover:bg-accent-dark transition text-xs sm:text-sm"
           >
             Add To Cart
           </button>
 
           <Link
-            href={`/products/${slug}`}
-            className="text-accent hover:text-accent-dark font-semibold text-sm flex items-center gap-1"
+            href={`/products/${product._id}`}
+            className="text-accent hover:text-accent-dark font-semibold text-xs sm:text-sm flex items-center gap-1"
           >
             View Product
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>

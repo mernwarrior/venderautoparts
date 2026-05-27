@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa';
-
+import { useToast } from '@/components/context/ToastContext';
 
 interface ContactForm {
   name: string;
@@ -12,6 +12,7 @@ interface ContactForm {
 }
 
 export default function Contact() {
+  const { showToast } = useToast()
   const [formData, setFormData] = useState<ContactForm>({
     name: '',
     email: '',
@@ -48,9 +49,11 @@ export default function Contact() {
 
       setSuccess(true);
       setFormData({ name: '', email: '', phone: '', message: '' });
+      showToast('Message sent successfully! We will contact you soon.', 'success')
     } catch (err: unknown) {
       const message = 'Something went wrong. Please try again.';
       setError(message);
+      showToast(message, 'error')
     } finally {
       setLoading(false);
     }
@@ -63,8 +66,8 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* ── Contact Form ─────────────────────────────────── */}
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-2xl font-bold text-primary-dark mb-6">Get in Touch</h2>
+          <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold text-primary-dark mb-6">Get in Touch</h2>
 
             {/* Success state */}
             {success ? (
@@ -181,8 +184,8 @@ export default function Contact() {
 
           {/* ── Contact Information ───────────────────────────── */}
           <div>
-            <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-              <h2 className="text-2xl font-bold text-primary-dark mb-6">Contact Information</h2>
+            <div className="bg-white rounded-lg shadow-md p-6 md:p-8 mb-6">
+              <h2 className="text-xl md:text-2xl font-bold text-primary-dark mb-6">Contact Information</h2>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="text-2xl text-accent mt-1"><FaPhone /></div>
@@ -221,8 +224,8 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="bg-accent text-white rounded-lg p-8 text-center">
-              <h3 className="text-2xl font-bold mb-4">Need a Quote?</h3>
+            <div className="bg-accent text-white rounded-lg p-6 md:p-8 text-center">
+              <h3 className="text-xl md:text-2xl font-bold mb-4">Need a Quote?</h3>
               <p className="mb-6">Get in touch with us for competitive pricing and bulk orders.</p>
               <a
                 href="tel:+919266323328"

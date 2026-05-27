@@ -20,16 +20,17 @@ export default function Navbar({ cartCount, user }: NavbarProps) {
     <>
       {/* Top Bar */}
       <div className="bg-primary-dark text-white py-2">
-        <div className="container-custom flex justify-between items-center text-sm">
-          <div className="flex items-center gap-4">
-            <a href="tel:+919266323328" className="flex items-center gap-2 hover:text-accent">
-              <FaPhone className="text-xs" />
-              <span>Call Us: +91 - 9266323328</span>
+        <div className="container-custom flex justify-between items-center text-xs sm:text-sm">
+          <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+            <a href="tel:+919266323328" className="flex items-center gap-1 sm:gap-2 hover:text-accent whitespace-nowrap">
+              <FaPhone className="text-xs flex-shrink-0" />
+              <span className="hidden sm:inline">Call Us:</span>
+              <span>+91 - 9266323328</span>
             </a>
           </div>
-          <div className="flex items-center gap-2">
-            <FaEnvelope className="text-xs" />
-            <a href="mailto:venderautoparts@hotmail.com" className="hover:text-accent">
+          <div className="flex items-center gap-1 sm:gap-2 min-w-0">
+            <FaEnvelope className="text-xs flex-shrink-0" />
+            <a href="mailto:venderautoparts@hotmail.com" className="hover:text-accent truncate max-w-[120px] sm:max-w-none">
               venderautoparts@hotmail.com
             </a>
           </div>
@@ -76,9 +77,6 @@ export default function Navbar({ cartCount, user }: NavbarProps) {
 
               <Link href="/contact" className="text-gray-700 hover:text-accent font-semibold transition-colors">
                 Contact
-              </Link>
-              <Link href="/contact" className="btn-primary">
-                Get Quote
               </Link>
 
               {user ? (
@@ -159,7 +157,6 @@ export default function Navbar({ cartCount, user }: NavbarProps) {
               <Link href="/contact" className="block text-gray-700 hover:text-accent font-semibold" onClick={toggleMenu}>
                 Contact
               </Link>
-              <Link href="/contact" className="block btn-primary text-center" onClick={toggleMenu}>Get Quote</Link>
 
               {user ? (
                 <>

@@ -4,6 +4,7 @@ import './globals.css'
 import Footer from '@/components/Footer'
 import { CartProvider } from '@/components/context/CartContext'
 import { AuthProvider } from '@/components/context/AuthContext'
+import { ToastProvider } from '@/components/context/ToastContext'
 import NavbarWrapper from '@/components/NavbarWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -24,9 +25,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <CartProvider>
-            <NavbarWrapper />
-            <main className="min-h-screen">{children}</main>
-            <Footer />
+            <ToastProvider>
+              <NavbarWrapper />
+              <main className="min-h-screen">{children}</main>
+              <Footer />
+            </ToastProvider>
           </CartProvider>
         </AuthProvider>
       </body>

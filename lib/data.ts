@@ -7,6 +7,13 @@ export async function getProducts() {
   return JSON.parse(JSON.stringify(products))
 }
 
+export async function getProductById(id: string) {
+  await connectDB()
+  const product = await Product.findById(id).lean()
+  if (!product) return null
+  return JSON.parse(JSON.stringify(product))
+}
+
 export async function getProductBySlug(slug: string) {
   await connectDB()
   const product = await Product.findOne({ urlSlug: slug }).lean()

@@ -4,7 +4,7 @@ export default function PrivacyPolicy() {
       <div className="container-custom max-w-4xl">
         <h1 className="section-title mb-12">Privacy Policy</h1>
 
-        <div className="bg-white rounded-lg shadow-md p-8 prose prose-lg max-w-none">
+        <div className="bg-white rounded-lg shadow-md p-6 md:p-8 prose prose-lg max-w-none">
           <p className="text-gray-600 mb-6">
             Last updated: May 17, 2026
           </p>

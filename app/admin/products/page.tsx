@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Pagination from '@/components/Pagination'
+import ConfirmModal from '@/components/ConfirmModal'
+import { useToast } from '@/components/context/ToastContext'
 
 interface Product {
   _id: string
@@ -24,10 +26,12 @@ function makeSlug(title: string) {
 }
 
 export default function AdminProducts() {
+  const { showToast } = useToast()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Product | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<Product | null>(null)
   const [page, setPage] = useState(1)
   const [form, setForm] = useState({
     title: '', description: '', stockId: '', category: '', subCategory: '',
@@ -86,19 +90,29 @@ export default function AdminProducts() {
       if (res.ok) {
         resetForm()
         fetchProducts()
+        showToast(editing ? 'Product updated successfully' : 'Product created successfully', 'success')
+      } else {
+        showToast('Failed to save product', 'error')
       }
     } catch (err) {
-      console.error('Failed to save product', err)
+      showToast('Something went wrong', 'error')
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this product?')) return
+  const handleDelete = async () => {
+    if (!deleteTarget) return
     try {
-      const res = await fetch(`/api/products/${id}`, { method: 'DELETE' })
-      if (res.ok) fetchProducts()
+      const res = await fetch(`/api/products/${deleteTarget._id}`, { method: 'DELETE' })
+      if (res.ok) {
+        fetchProducts()
+        showToast('Product deleted successfully', 'success')
+      } else {
+        showToast('Failed to delete product', 'error')
+      }
     } catch (err) {
-      console.error('Failed to delete product', err)
+      showToast('Something went wrong', 'error')
+    } finally {
+      setDeleteTarget(null)
     }
   }
 
@@ -204,38 +218,40 @@ export default function AdminProducts() {
       ) : products.length === 0 ? (
         <div className="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">No products found</div>
       ) : (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Image</th>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Title</th>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Brand</th>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Stock ID</th>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Price</th>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Sale Price</th>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginated.map((product) => (
-                  <tr key={product._id} className="border-t">
-                    <td className="px-4 py-3">
-                      <div className="w-12 h-12 bg-gray-100 rounded overflow-hidden">
-                        <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-sm font-semibold">{product.title}</td>
-                    <td className="px-4 py-3 text-sm">{product.brandTitle}</td>
-                    <td className="px-4 py-3 text-sm font-mono">{product.stockId}</td>
-                    <td className="px-4 py-3 text-sm line-through text-gray-400">₹{product.amount}</td>
-                    <td className="px-4 py-3 text-sm font-semibold text-accent">₹{product.saleAmount}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2">
-                        <button onClick={() => handleEdit(product)}
-                          className="text-blue-600 hover:text-blue-800 text-sm font-semibold">Edit</button>
-                        <button onClick={() => handleDelete(product._id)}
+        <>
+          {/* Desktop table */}
+          <div className="hidden md:block bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">Image</th>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">Title</th>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">Brand</th>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">Stock ID</th>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">Price</th>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">Sale Price</th>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginated.map((product) => (
+                    <tr key={product._id} className="border-t">
+                      <td className="px-4 py-3">
+                        <div className="w-12 h-12 bg-gray-100 rounded overflow-hidden">
+                          <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm font-semibold">{product.title}</td>
+                      <td className="px-4 py-3 text-sm">{product.brandTitle}</td>
+                      <td className="px-4 py-3 text-sm font-mono">{product.stockId}</td>
+                      <td className="px-4 py-3 text-sm line-through text-gray-400">₹{product.amount}</td>
+                      <td className="px-4 py-3 text-sm font-semibold text-accent">₹{product.saleAmount}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex gap-2">
+                          <button onClick={() => handleEdit(product)}
+                            className="text-blue-600 hover:text-blue-800 text-sm font-semibold">Edit</button>
+                    <button onClick={() => setDeleteTarget(product)}
                           className="text-red-600 hover:text-red-800 text-sm font-semibold">Delete</button>
                       </div>
                     </td>
@@ -244,9 +260,52 @@ export default function AdminProducts() {
               </tbody>
             </table>
           </div>
+          <div className="p-4">
+            <Pagination current={page} total={products.length} perPage={PER_PAGE} onPage={setPage} />
+          </div>
+        </div>
+        {/* Mobile card view */}
+        <div className="md:hidden space-y-4">
+          {paginated.map((product) => (
+            <div key={product._id} className="bg-white rounded-lg shadow-md p-4">
+              <div className="flex gap-3">
+                <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                  <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-sm truncate">{product.title}</h3>
+                  <p className="text-xs text-gray-500">{product.brandTitle}</p>
+                  <p className="text-xs font-mono text-gray-400 mt-0.5">{product.stockId}</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between mt-3 pt-3 border-t">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm line-through text-gray-400">₹{product.amount}</span>
+                  <span className="text-sm font-bold text-accent">₹{product.saleAmount}</span>
+                </div>
+                <div className="flex gap-3">
+                  <button onClick={() => handleEdit(product)}
+                    className="text-blue-600 hover:text-blue-800 text-sm font-semibold">Edit</button>
+                  <button onClick={() => setDeleteTarget(product)}
+                    className="text-red-600 hover:text-red-800 text-sm font-semibold">Delete</button>
+                </div>
+              </div>
+            </div>
+          ))}
           <Pagination current={page} total={products.length} perPage={PER_PAGE} onPage={setPage} />
         </div>
+      </>
       )}
+      <ConfirmModal
+        isOpen={!!deleteTarget}
+        title="Delete Product"
+        message={`Are you sure you want to delete "${deleteTarget?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   )
 }

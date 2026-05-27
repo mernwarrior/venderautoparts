@@ -5,8 +5,8 @@ export default function About() {
         <h1 className="section-title mb-12">About Us</h1>
         
         <div className="prose prose-lg max-w-none">
-          <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-            <h2 className="text-2xl font-bold text-primary-dark mb-4">Our Journey</h2>
+          <div className="bg-white rounded-lg shadow-md p-6 md:p-8 mb-6 md:mb-8">
+            <h2 className="text-xl md:text-2xl font-bold text-primary-dark mb-4">Our Journey</h2>
             <p className="text-gray-600 mb-4">
               Founded in 1962, Vender Auto Parts has grown into one of the leading manufacturers, suppliers, and exporters of two-wheeler and three-wheeler spare parts from India. Starting with the production of piston pins for various applications, we quickly earned a reputation for quality and reliability in the automotive components industry. The 1970s and 1980s were a turning point, as we adopted advanced manufacturing technologies to meet evolving demand.
             </p>
@@ -15,15 +15,15 @@ export default function About() {
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-            <h2 className="text-2xl font-bold text-primary-dark mb-4">Our Mission</h2>
+          <div className="bg-white rounded-lg shadow-md p-6 md:p-8 mb-6 md:mb-8">
+            <h2 className="text-xl md:text-2xl font-bold text-primary-dark mb-4">Our Mission</h2>
             <p className="text-gray-600">
               As a reliable three-wheeler spare parts supplier in India, Vender Auto Parts is committed to delivering durable, cost-effective, and precision-engineered components that help our clients stay competitive in their markets. Our Promise: Quality parts, timely delivery, and long-term partnerships with our global clients.
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-2xl font-bold text-primary-dark mb-4">Why Choose Us</h2>
+          <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold text-primary-dark mb-4">Why Choose Us</h2>
             <ul className="space-y-3 text-gray-600">
               <li className="flex items-start">
                 <span className="text-accent mr-2">✓</span>

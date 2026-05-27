@@ -58,45 +58,70 @@ export default function AdminUsers() {
           No users found
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">User</th>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Email</th>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Phone</th>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">City</th>
-                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Joined</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginated.map((user) => (
-                  <tr key={user._id} className="border-t hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center">
-                          <FaUser className="text-accent text-sm" />
-                        </div>
-                        <span className="font-semibold text-sm">{user.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">{user.email}</td>
-                    <td className="px-4 py-3 text-sm text-gray-600">{user.phone || '-'}</td>
-                    <td className="px-4 py-3 text-sm text-gray-600">{user.city || '-'}</td>
-                    <td className="px-4 py-3 text-sm text-gray-500">
-                      {new Date(user.createdAt).toLocaleDateString()}
-                    </td>
+        <>
+          {/* Desktop table */}
+          <div className="hidden md:block bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">User</th>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">Email</th>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">Phone</th>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">City</th>
+                    <th className="px-4 py-3 text-sm font-semibold text-gray-600">Joined</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {paginated.map((user) => (
+                    <tr key={user._id} className="border-t hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center">
+                            <FaUser className="text-accent text-sm" />
+                          </div>
+                          <span className="font-semibold text-sm">{user.name}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-600">{user.email}</td>
+                      <td className="px-4 py-3 text-sm text-gray-600">{user.phone || '-'}</td>
+                      <td className="px-4 py-3 text-sm text-gray-600">{user.city || '-'}</td>
+                      <td className="px-4 py-3 text-sm text-gray-500">
+                        {new Date(user.createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="px-4 py-3 bg-gray-50 text-sm text-gray-500 border-t flex items-center justify-between">
+              <span>Total Users: {users.length}</span>
+              <Pagination current={page} total={users.length} perPage={PER_PAGE} onPage={setPage} />
+            </div>
           </div>
-          <div className="px-4 py-3 bg-gray-50 text-sm text-gray-500 border-t flex items-center justify-between">
-            <span>Total Users: {users.length}</span>
+          {/* Mobile card view */}
+          <div className="md:hidden space-y-3">
+            {paginated.map((user) => (
+              <div key={user._id} className="bg-white rounded-lg shadow-md p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <FaUser className="text-accent text-sm" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-sm">{user.name}</p>
+                    <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 border-t pt-2">
+                  <div><span className="text-gray-400">Phone:</span> {user.phone || '-'}</div>
+                  <div><span className="text-gray-400">City:</span> {user.city || '-'}</div>
+                  <div><span className="text-gray-400">Joined:</span> {new Date(user.createdAt).toLocaleDateString()}</div>
+                </div>
+              </div>
+            ))}
             <Pagination current={page} total={users.length} perPage={PER_PAGE} onPage={setPage} />
           </div>
-        </div>
+        </>
       )}
     </div>
   )

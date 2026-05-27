@@ -70,40 +70,67 @@ export default function AdminDashboard() {
             {recentOrders.length === 0 ? (
               <p className="text-gray-500 text-center py-4">No orders yet</p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="pb-3 font-semibold text-gray-600">Order ID</th>
-                      <th className="pb-3 font-semibold text-gray-600">Customer</th>
-                      <th className="pb-3 font-semibold text-gray-600">Amount</th>
-                      <th className="pb-3 font-semibold text-gray-600">Status</th>
-                      <th className="pb-3 font-semibold text-gray-600">Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {recentOrders.map((order) => (
-                      <tr key={order._id} className="border-b last:border-0">
-                        <td className="py-4 text-sm font-mono">{order._id.slice(-8)}</td>
-                        <td className="py-4 text-sm">{order.firstName} {order.lastName}</td>
-                        <td className="py-4 text-sm font-semibold">₹{order.grandTotal}</td>
-                        <td className="py-4">
-                          <span className={`px-2 py-1 rounded text-xs font-semibold capitalize ${
-                            order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                            order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
-                            order.status === 'shipped' ? 'bg-purple-100 text-purple-800' :
-                            order.status === 'delivered' ? 'bg-green-100 text-green-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {order.status}
-                          </span>
-                        </td>
-                        <td className="py-4 text-sm">{new Date(order.orderDate).toLocaleDateString()}</td>
+              <>
+                {/* Desktop table */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="pb-3 font-semibold text-gray-600">Order ID</th>
+                        <th className="pb-3 font-semibold text-gray-600">Customer</th>
+                        <th className="pb-3 font-semibold text-gray-600">Amount</th>
+                        <th className="pb-3 font-semibold text-gray-600">Status</th>
+                        <th className="pb-3 font-semibold text-gray-600">Date</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {recentOrders.map((order) => (
+                        <tr key={order._id} className="border-b last:border-0">
+                          <td className="py-4 text-sm font-mono">{order._id.slice(-8)}</td>
+                          <td className="py-4 text-sm">{order.firstName} {order.lastName}</td>
+                          <td className="py-4 text-sm font-semibold">₹{order.grandTotal}</td>
+                          <td className="py-4">
+                            <span className={`px-2 py-1 rounded text-xs font-semibold capitalize ${
+                              order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                              order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                              order.status === 'shipped' ? 'bg-purple-100 text-purple-800' :
+                              order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {order.status}
+                            </span>
+                          </td>
+                          <td className="py-4 text-sm">{new Date(order.orderDate).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {/* Mobile card view */}
+                <div className="md:hidden space-y-3">
+                  {recentOrders.map((order) => (
+                    <div key={order._id} className="border rounded-lg p-4 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="font-mono text-sm bg-gray-100 px-2 py-0.5 rounded">#{order._id.slice(-8)}</span>
+                        <span className={`px-2 py-1 rounded text-xs font-semibold capitalize ${
+                          order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                          order.status === 'shipped' ? 'bg-purple-100 text-purple-800' :
+                          order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {order.status}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="font-semibold">{order.firstName} {order.lastName}</span>
+                        <span className="text-accent font-bold">₹{order.grandTotal}</span>
+                      </div>
+                      <div className="text-xs text-gray-500">{new Date(order.orderDate).toLocaleDateString()}</div>
+                    </div>
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </>

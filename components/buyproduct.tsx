@@ -5,9 +5,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FaTrash, FaMinus, FaPlus, FaShoppingCart, FaArrowLeft } from 'react-icons/fa'
 import { useCart } from './context/CartContext'
+import { useToast } from '@/components/context/ToastContext'
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, cartTotal } = useCart()
+  const { showToast } = useToast()
   const [loading, setLoading] = useState(false)
   const [orderSuccess, setOrderSuccess] = useState(false)
   const [orderError, setOrderError] = useState('')
@@ -86,8 +88,10 @@ export default function CartPage() {
 
       setOrderSuccess(true)
       clearCart()
+      showToast('Order placed successfully! We will contact you soon.', 'success')
     } catch (error: any) {
       setOrderError(error.message || 'Something went wrong. Please try again.')
+      showToast(error.message || 'Something went wrong. Please try again.', 'error')
     } finally {
       setLoading(false)
     }
@@ -133,14 +137,15 @@ export default function CartPage() {
       <div className="container-custom">
 
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Link href="/products" className="flex items-center gap-2 text-gray-500 hover:text-accent transition">
+        <div className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
+          <Link href="/products" className="flex items-center gap-1 sm:gap-2 text-gray-500 hover:text-accent transition text-sm sm:text-base whitespace-nowrap">
             <FaArrowLeft />
-            <span>Continue Shopping</span>
+            <span className="hidden sm:inline">Continue Shopping</span>
+            <span className="sm:hidden">Back</span>
           </Link>
-          <h1 className="text-3xl font-bold text-primary-dark ml-auto">
+          <h1 className="text-xl sm:text-3xl font-bold text-primary-dark ml-auto">
             Your Cart
-            <span className="ml-3 text-lg font-normal text-gray-400">
+            <span className="ml-2 sm:ml-3 text-sm sm:text-lg font-normal text-gray-400">
               ({cart.reduce((s, i) => s + i.quantity, 0)} items)
             </span>
           </h1>
@@ -161,10 +166,10 @@ export default function CartPage() {
                 return (
                   <div
                     key={item._id}
-                    className="bg-white rounded-xl shadow-sm p-4 flex gap-4 items-center"
+                    className="bg-white rounded-xl shadow-sm p-3 sm:p-4 flex gap-3 sm:gap-4 items-center"
                   >
                     {/* Product Image */}
-                    <div className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                    <div className="relative w-16 h-16 sm:w-20 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
                       {/* <Image
                         src={imageUrl}
                         alt={item.title}
@@ -176,52 +181,52 @@ export default function CartPage() {
 
                     {/* Product Info */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+                      <p className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider mb-0.5 sm:mb-1">
                         {item.brandTitle} • {item.subCategory}
                       </p>
-                      <h3 className="font-bold text-primary-dark text-sm md:text-base line-clamp-2">
+                      <h3 className="font-bold text-primary-dark text-xs sm:text-sm md:text-base line-clamp-2">
                         {item.title}
                       </h3>
-                      <p className="text-xs text-gray-400 mt-1">Stock: {item.stockId}</p>
+                      <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5 sm:mt-1">Stock: {item.stockId}</p>
 
-                      <div className="flex items-center gap-3 mt-3">
+                      <div className="flex items-center gap-2 sm:gap-3 mt-2 sm:mt-3">
                         {/* Quantity Controls */}
-                        <div className="flex items-center gap-2 border border-gray-200 rounded-lg overflow-hidden">
+                        <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
                           <button
                             onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                            className="px-3 py-1 bg-gray-100 hover:bg-gray-200 transition text-sm"
+                            className="px-2 sm:px-3 py-1 bg-gray-100 hover:bg-gray-200 transition text-xs sm:text-sm"
                           >
-                            <FaMinus className="text-xs" />
+                            <FaMinus className="text-[10px] sm:text-xs" />
                           </button>
-                          <span className="px-3 font-semibold text-sm">{item.quantity}</span>
+                          <span className="px-2 sm:px-3 font-semibold text-xs sm:text-sm">{item.quantity}</span>
                           <button
                             onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                            className="px-3 py-1 bg-gray-100 hover:bg-gray-200 transition text-sm"
+                            className="px-2 sm:px-3 py-1 bg-gray-100 hover:bg-gray-200 transition text-xs sm:text-sm"
                           >
-                            <FaPlus className="text-xs" />
+                            <FaPlus className="text-[10px] sm:text-xs" />
                           </button>
                         </div>
 
                         {/* Remove */}
                         <button
-                          onClick={() => removeFromCart(item._id)}
-                          className="text-red-400 hover:text-red-600 transition ml-2"
+                          onClick={() => { removeFromCart(item._id); showToast('Item removed from cart', 'info') }}
+                          className="text-red-400 hover:text-red-600 transition ml-0 sm:ml-2"
                           title="Remove item"
                         >
-                          <FaTrash />
+                          <FaTrash className="text-xs sm:text-sm" />
                         </button>
                       </div>
                     </div>
 
                     {/* Price */}
                     <div className="text-right flex-shrink-0">
-                      <p className="text-lg font-bold text-accent">
+                      <p className="text-sm sm:text-lg font-bold text-accent">
                         ₹{(item.saleAmount * item.quantity).toLocaleString()}
                       </p>
-                      <p className="text-xs text-gray-400 line-through">
+                      <p className="text-[10px] sm:text-xs text-gray-400 line-through">
                         ₹{(item.amount * item.quantity).toLocaleString()}
                       </p>
-                      <p className="text-xs text-gray-400">₹{item.saleAmount} each</p>
+                      <p className="text-[10px] sm:text-xs text-gray-400">₹{item.saleAmount} each</p>
                     </div>
                   </div>
                 )

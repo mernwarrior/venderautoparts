@@ -2,20 +2,20 @@ export default function Services() {
   return (
     <div>
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary-dark via-primary to-primary-light text-white py-20">
+      <div className="bg-gradient-to-r from-primary-dark via-primary to-primary-light text-white py-16 sm:py-20">
         <div className="container-custom text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Our services</h1>
-          <p className="text-xl">We have a lot to offer</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Our services</h1>
+          <p className="text-lg sm:text-xl">We have a lot to offer</p>
         </div>
       </div>
 
       {/* Services Content */}
-      <div className="py-16">
+      <div className="py-12 sm:py-16">
         <div className="container-custom max-w-4xl">
-          <div className="space-y-12">
+          <div className="space-y-8 sm:space-y-12">
             {/* Service 1 */}
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h2 className="text-2xl font-bold text-primary-dark mb-4">SERVING SINCE 1962</h2>
+            <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
+              <h2 className="text-xl md:text-2xl font-bold text-primary-dark mb-4">SERVING SINCE 1962</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
                 With over 58 years of experience in the manufacturing industry, Vender Auto Parts has built unmatched expertise in producing and exporting high-quality two-wheeler and three-wheeler spare parts. Our decades of experience allow us to tap into the right resources, adopt the latest technologies, and deliver the best products and services to our customers worldwide.
               </p>
@@ -25,7 +25,7 @@ export default function Services() {
             </div>
 
             {/* Service 2 */}
-            <div className="bg-white rounded-lg shadow-md p-8">
+            <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
               <h2 className="text-2xl font-bold text-primary-dark mb-4">STATE OF THE ART MACHINERY</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
                 Equipped with state-of-the-art machinery and a highly skilled workforce with over 30 years of experience, Vender Auto Parts has established itself as a leader in the manufacture of three-wheeler and two-wheeler components. Our advanced infrastructure, combined with cutting-edge CNC machines, supports our streamlined production processes with precision and efficiency, ensuring that every product meets the highest standards of quality and reliability.
@@ -36,7 +36,7 @@ export default function Services() {
             </div>
 
             {/* Service 3 */}
-            <div className="bg-white rounded-lg shadow-md p-8">
+            <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
               <h2 className="text-2xl font-bold text-primary-dark mb-4">ON TIME CUSTOMER SUPPORT</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
                 With a strong presence in countries, Vender Auto Parts has built its reputation on reliable service and timely communication. Our ability to provide quick responses, regular updates, and smooth coordination has been a key factor in our growth and client satisfaction worldwide.
@@ -47,7 +47,7 @@ export default function Services() {
             </div>
 
             {/* Service 4 */}
-            <div className="bg-white rounded-lg shadow-md p-8">
+            <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
               <h2 className="text-2xl font-bold text-primary-dark mb-4">PRECISION IN QUALITY</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
                 At Vender Auto Parts, quality is at the core of our manufacturing process. We strive to deliver the highest three-wheeler spare parts in the market through rigorous quality grade checks and systematic on-floor inspection routines at every stage of production.
@@ -61,7 +61,7 @@ export default function Services() {
             </div>
 
             {/* Service 5 */}
-            <div className="bg-white rounded-lg shadow-md p-8">
+            <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
               <h2 className="text-2xl font-bold text-primary-dark mb-4">MANUFACTURERS</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
                 With over 58 years of experience in the manufacturing industry, Vender Auto Parts has built a legacy of trust, innovation, and quality. Our strict adherence to international standards enables us to tap into the right talent, technologies, and products that align with the evolving needs of our global customers.
@@ -75,7 +75,7 @@ export default function Services() {
             </div>
 
             {/* Service 6 */}
-            <div className="bg-white rounded-lg shadow-md p-8">
+            <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
               <h2 className="text-2xl font-bold text-primary-dark mb-4">EXPORTERS</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
                 Since 2005, we have also been a trusted exporter of three wheeler spare parts and auto components from India, supplying high-quality products to customers across 19 international markets. With a robust supply chain, backed by advanced manufacturing facilities and a reliable supply chain, we currently have the capacity to ship 20-25 containers every month, ensuring prompt delivery and consistent availability for our global buyers. Our expertise as a leading Indian three wheeler parts supplier has given us a competitive edge in addressing the diverse needs of international markets.

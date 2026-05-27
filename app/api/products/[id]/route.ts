@@ -7,12 +7,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     const { id } = await params
     await connectDB()
 
-    const product = await Product.findById(id)
+    const product = await Product.findById(id).lean()
     if (!product) {
       return Response.json({ message: 'Product not found' }, { status: 404 })
     }
 
-    return Response.json({ product })
+    return Response.json({ product: JSON.parse(JSON.stringify(product)) })
   } catch (error) {
     return Response.json({ message: 'Something went wrong' }, { status: 500 })
   }

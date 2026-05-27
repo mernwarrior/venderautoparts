@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Pagination from '@/components/Pagination'
+import { useToast } from '@/components/context/ToastContext'
 
 interface Order {
   _id: string
@@ -23,6 +24,7 @@ interface Order {
 const PER_PAGE = 10
 
 export default function AdminOrders() {
+  const { showToast } = useToast()
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
@@ -55,9 +57,12 @@ export default function AdminOrders() {
         setOrders((prev) =>
           prev.map((o) => (o._id === orderId ? { ...o, status } : o))
         )
+        showToast(`Order #${orderId.slice(-8)} status updated to ${status}`, 'success')
+      } else {
+        showToast('Failed to update status', 'error')
       }
     } catch (err) {
-      console.error('Failed to update status', err)
+      showToast('Something went wrong', 'error')
     }
   }
 
