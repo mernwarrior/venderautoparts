@@ -1,18 +1,13 @@
-import { getProducts } from '@/services/productService';
-import { products as mockProducts } from '@/data/products';
+import { getProducts } from '@/lib/data';
 import ProductsClient from '@/components/productClinet';
 
+export const dynamic = 'force-dynamic'
+
 export default async function BajajProducts() {
-  let fetchedProducts = [];
-  try {
-    fetchedProducts = await getProducts();
-  } catch (error) {
-    console.error('Failed to fetch products from API, using fallback:', error);
-    fetchedProducts = mockProducts;
-  }
+  const fetchedProducts = await getProducts();
 
   const bajajProducts = fetchedProducts.filter(
-    (p) =>
+    (p: any) =>
       p.category?.toLowerCase().includes('bajaj') ||
       p.brandTitle?.toLowerCase().includes('bajaj')
   );

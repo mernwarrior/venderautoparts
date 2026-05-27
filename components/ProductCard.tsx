@@ -10,20 +10,21 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, addToCart }: ProductCardProps) {
-  // const imageUrl = product?.image?.startsWith('http')
-  //   ? product?.image
-  //   : `http://localhost:7005${product?.image}`
+  const imageUrl = product?.image?.startsWith('http')
+    ? product?.image
+    : product?.image
+  const slug = product?.urlSlug || product?._id
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden group">
       <div className="relative h-64 overflow-hidden bg-gray-100">
-        {/* <Image
-          src={imageUrl}
-          alt={product?.title}
+        <Image
+          src={imageUrl || '/placeholder.png'}
+          alt={product?.title || 'Product image'}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover group-hover:scale-110 transition-transform duration-500"
-        /> */}
+        />
       </div>
 
       <div className="p-6">
@@ -49,7 +50,6 @@ export default function ProductCard({ product, addToCart }: ProductCardProps) {
         <div className="flex flex-col gap-3">
           <span className="text-xs text-gray-500">Stock ID: {product.stockId}</span>
 
-          {/* ✅ e.stopPropagation() — page refresh nahi hoga */}
           <button
             onClick={(e) => {
               e.stopPropagation()
@@ -61,7 +61,7 @@ export default function ProductCard({ product, addToCart }: ProductCardProps) {
           </button>
 
           <Link
-            href={`/products/${product.urlSlug}`}
+            href={`/products/${slug}`}
             className="text-accent hover:text-accent-dark font-semibold text-sm flex items-center gap-1"
           >
             View Product

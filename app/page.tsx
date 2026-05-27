@@ -1,21 +1,14 @@
 import Hero from '@/components/Hero'
 import ServiceCard from '@/components/ServiceCard'
 import HomeClient from '@/components/HomeClient'
-import { getProducts } from '@/services/productService'
+import { getProducts } from '@/lib/data'
+import { FaCogs, FaWrench, FaUsers, FaAward } from 'react-icons/fa'
 
-import {
-  FaCogs,
-  FaWrench,
-  FaUsers,
-  FaAward
-} from 'react-icons/fa'
-import Navbar from '@/components/Navbar'
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-
-  const products = await getProducts()
-
-  const topProducts = products.slice(0, 6)
+  const allProducts = await getProducts()
+  const topProducts = allProducts.slice(0, 6)
 
   return (
     <>

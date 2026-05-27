@@ -1,20 +1,10 @@
-import { getProductBySlug } from '@/services/productService';
-import { products as mockProducts } from '@/data/products';
+import { getProductBySlug } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function ProductDetails({ params }: { params: { slug: string } }) {
-  let product = null;
-  try {
-    product = await getProductBySlug(params.slug);
-  } catch (error) {
-    console.error('Failed to fetch product by slug, using fallback:', error);
-  }
-
-  if (!product) {
-    product = mockProducts.find(p => p.urlSlug === params.slug) || null;
-  }
+  const product = await getProductBySlug(params.slug);
 
   if (!product) {
     notFound();
@@ -22,7 +12,7 @@ export default async function ProductDetails({ params }: { params: { slug: strin
 
   const imageUrl = product.image.startsWith('http')
     ? product.image
-    : `https://eco-node-revm.onrender.com${product.image}`;
+    : product.image;
 
   return (
     <div className="py-16">

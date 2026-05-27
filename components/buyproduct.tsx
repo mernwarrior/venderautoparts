@@ -71,7 +71,7 @@ export default function CartPage() {
         orderDate: new Date().toISOString(),
       }
 
-      const response = await fetch('https://eco-node-revm.onrender.com/api/orders', {
+      const response = await fetch('/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

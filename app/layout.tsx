@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Footer from '@/components/Footer'
 import { CartProvider } from '@/components/context/CartContext'
+import { AuthProvider } from '@/components/context/AuthContext'
 import NavbarWrapper from '@/components/NavbarWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -13,7 +14,6 @@ export const metadata: Metadata = {
     'High quality three wheeler spare parts for TVS and Bajaj auto rickshaws. Genuine parts with warranty.',
 }
 
-// ✅ Layout SERVER component hai — 'use client' BILKUL MAT LAGAO
 export default function RootLayout({
   children,
 }: {
@@ -22,11 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <CartProvider>
-          <NavbarWrapper />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <NavbarWrapper />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   )

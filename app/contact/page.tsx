@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa';
-import axiosInstance from '@/config/axios.config';
+
 
 interface ContactForm {
   name: string;
@@ -35,19 +35,21 @@ export default function Contact() {
     setError('');
 
     try {
-      await axiosInstance.post('/contact', {
-        name:    formData.name.trim(),
-        email:   formData.email.trim(),
-        phone:   formData.phone.trim(),
-        message: formData.message.trim(),
+      await fetch('/api/contacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          message: formData.message.trim(),
+        }),
       });
 
       setSuccess(true);
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (err: unknown) {
-      const message =
-        (err as { response?: { data?: { message?: string } } })?.response?.data
-          ?.message || 'Something went wrong. Please try again.';
+      const message = 'Something went wrong. Please try again.';
       setError(message);
     } finally {
       setLoading(false);
